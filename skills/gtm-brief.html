@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>/gtm-brief — Product Playbooks</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', -apple-system, sans-serif; background: #fafafa; color: #374151; min-height: 100vh; }
+
+    header {
+      background: #fff;
+      border-bottom: 1px solid #e5e7eb;
+      padding: 1.25rem 2rem;
+    }
+    header .inner { max-width: 640px; margin: 0 auto; }
+    .back { font-size: 0.8125rem; color: #6b7280; text-decoration: none; display: inline-flex; align-items: center; gap: 0.25rem; }
+    .back:hover { color: #7c3aed; }
+
+    .content { max-width: 640px; margin: 0 auto; padding: 2rem 2rem 4rem; }
+
+    h1 { font-size: 1.375rem; font-weight: 700; color: #030712; margin-bottom: 0.25rem; }
+    .subtitle { font-size: 0.8125rem; color: #6b7280; margin-bottom: 2rem; }
+
+    h2 {
+      font-size: 0.8125rem; font-weight: 600; color: #030712;
+      margin-top: 2.5rem; margin-bottom: 0.625rem;
+      text-transform: uppercase; letter-spacing: 0.03em;
+    }
+    h2:first-of-type { margin-top: 0; }
+
+    p, li { font-size: 0.8125rem; color: #374151; line-height: 1.7; }
+    ul { padding-left: 1.25rem; margin-bottom: 1rem; }
+    li { margin-bottom: 0.25rem; }
+
+    .invoke {
+      background: #f5f3ff; border: 1px solid #e0d7fe; border-radius: 8px;
+      padding: 1rem 1.25rem; margin-bottom: 2rem;
+    }
+    .invoke code { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 0.8125rem; color: #7c3aed; }
+    .invoke p { font-size: 0.75rem; color: #6b7280; margin-top: 0.5rem; }
+
+    .step {
+      display: flex; gap: 0.75rem; margin-bottom: 0.75rem;
+    }
+    .step-num {
+      width: 22px; height: 22px; border-radius: 50%; background: #7c3aed; color: #fff;
+      font-size: 0.6875rem; font-weight: 700; display: flex; align-items: center;
+      justify-content: center; flex-shrink: 0; margin-top: 0.125rem;
+    }
+    .step-text { font-size: 0.8125rem; color: #374151; line-height: 1.6; }
+    .step-text strong { color: #030712; }
+
+    .rule {
+      background: #fffbeb; border-left: 3px solid #eab308;
+      padding: 0.5rem 0.75rem; margin-bottom: 0.5rem; border-radius: 0 4px 4px 0;
+    }
+    .rule p { font-size: 0.75rem; margin: 0; }
+    .rule strong { color: #854d0e; }
+
+    .structure-list {
+      font-family: 'SF Mono', 'Fira Code', monospace; font-size: 0.75rem;
+      background: #fff; border: 1px solid #e5e7eb; border-radius: 8px;
+      padding: 1rem 1.25rem; line-height: 1.8; color: #374151;
+    }
+
+    .section { margin-bottom: 1.5rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="inner">
+      <a class="back" href="../index.html">&larr; Product Playbooks</a>
+    </div>
+  </header>
+
+  <div class="content">
+    <h1>/gtm-brief</h1>
+    <p class="subtitle">Generate a structured product brief for GTM from a PRD.</p>
+
+    <div class="invoke">
+      <code>/gtm-brief https://notion.so/mixmax/your-prd-page-id</code>
+      <p>Claude Code skill — say "create a GTM brief for [feature]" or use the slash command.</p>
+    </div>
+
+    <h2>What it does</h2>
+    <div class="section">
+      <p>Takes a PRD or feature spec and produces a customer-facing product brief for sales, CS, and marketing. Creates the brief as a Notion page in the <strong>Product briefs for GTM Repo</strong>, links it back to the source PRD, and iterates on your feedback.</p>
+    </div>
+
+    <h2>Workflow</h2>
+    <div class="section">
+      <div class="step">
+        <span class="step-num">1</span>
+        <span class="step-text"><strong>Fetch the PRD</strong> — reads the source Notion page to understand the feature</span>
+      </div>
+      <div class="step">
+        <span class="step-num">2</span>
+        <span class="step-text"><strong>Check format</strong> — fetches a recent GTM brief from the repo for consistency</span>
+      </div>
+      <div class="step">
+        <span class="step-num">3</span>
+        <span class="step-text"><strong>Generate the brief</strong> — translates engineering language into sales-ready content</span>
+      </div>
+      <div class="step">
+        <span class="step-num">4</span>
+        <span class="step-text"><strong>Create in Notion</strong> — publishes under the GTM Repo, links back to the PRD</span>
+      </div>
+      <div class="step">
+        <span class="step-num">5</span>
+        <span class="step-text"><strong>Iterate</strong> — refine based on your feedback until it's ready to share</span>
+      </div>
+    </div>
+
+    <h2>Brief structure</h2>
+    <div class="structure-list">
+      Feature Name &amp; Eligibility<br>
+      Value Proposition<br>
+      Problems We Solve<br>
+      How We Solve It<br>
+      How It Works<br>
+      FAQ<br>
+      GTM Talking Points<br>
+      Competitive Positioning<br>
+      Suggested Customer Messaging<br>
+      GTM Collateral Checklist
+    </div>
+
+    <h2>Translation rules</h2>
+    <div class="section">
+      <p style="margin-bottom: 0.75rem;">These rules ensure the brief reads well for salespeople and CS, not engineers:</p>
+      <div class="rule"><p><strong>No internal jargon</strong> — "PLG flows" becomes "built-in invite surfaces." No acronyms without explanation.</p></div>
+      <div class="rule"><p><strong>Customer-facing feature name</strong> — use the name users see in the UI, not the internal project name.</p></div>
+      <div class="rule"><p><strong>Benefits over implementation</strong> — "admins get full control" not "backend guard on prepaidAccounts."</p></div>
+      <div class="rule"><p><strong>External segment names</strong> — "enterprise customers" not "Direct Sales customers."</p></div>
+      <div class="rule"><p><strong>Name requesting customers</strong> — include them in Problems We Solve and collateral checklist for targeted outreach.</p></div>
+      <div class="rule"><p><strong>Self-serve when possible</strong> — link to the settings page, don't say "reach out to us."</p></div>
+      <div class="rule"><p><strong>Renewal/upsell framing</strong> — explicitly call out which plans don't have the feature and frame as a renewal lever.</p></div>
+      <div class="rule"><p><strong>Pyramid principle</strong> — lead with the takeaway. Details and supporting evidence below.</p></div>
+    </div>
+
+    <h2>Example</h2>
+    <div class="section">
+      <p>See the <a href="https://www.notion.so/mixmax/3337507ac6228139888ef09df2f1730d" style="color: #7c3aed; text-decoration: none;">Restrict Workspace Invitations — Product Brief for GTM</a> as a reference for this format in action.</p>
+    </div>
+  </div>
+</body>
+</html>

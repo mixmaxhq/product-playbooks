@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Playbooks</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: #fafafa;
+      color: #374151;
+      min-height: 100vh;
+    }
+
+    header {
+      background: #fff;
+      border-bottom: 1px solid #e5e7eb;
+      padding: 2rem 2rem 1.75rem;
+    }
+
+    header .inner {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      font-size: 1.375rem;
+      font-weight: 700;
+      color: #030712;
+      margin-bottom: 0.25rem;
+    }
+
+    .subtitle {
+      font-size: 0.8125rem;
+      color: #6b7280;
+    }
+
+    .content {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 1.5rem 2rem 4rem;
+    }
+
+    .group-label {
+      font-size: 0.6875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #9ca3af;
+      margin-bottom: 0.5rem;
+      margin-top: 2rem;
+    }
+
+    .group-label:first-child {
+      margin-top: 0;
+    }
+
+    .group {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.625rem;
+    }
+
+    .card {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.875rem;
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 1rem 1.125rem;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .card:hover {
+      border-color: #7c3aed;
+      box-shadow: 0 1px 4px rgba(124, 58, 237, 0.1);
+    }
+
+    .card-icon {
+      font-size: 1.25rem;
+      line-height: 1;
+      flex-shrink: 0;
+      margin-top: 0.125rem;
+    }
+
+    .card-body {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .card-title {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: #111827;
+      margin-bottom: 0.25rem;
+    }
+
+    .card-desc {
+      font-size: 0.75rem;
+      color: #6b7280;
+      line-height: 1.5;
+    }
+
+    .card-meta {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+
+    .tag {
+      font-size: 0.625rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 0.125rem 0.5rem;
+      border-radius: 9999px;
+      border: 1px solid;
+    }
+
+    .tag-skill {
+      color: #7c3aed;
+      border-color: #ddd6fe;
+      background: #f5f3ff;
+    }
+
+    .tag-template {
+      color: #0369a1;
+      border-color: #bae6fd;
+      background: #f0f9ff;
+    }
+
+    .card-arrow {
+      color: #9ca3af;
+      font-size: 1.125rem;
+      flex-shrink: 0;
+      margin-top: 0.125rem;
+    }
+
+    .empty-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 2rem;
+      color: #9ca3af;
+      font-size: 0.8125rem;
+      border: 1px dashed #e5e7eb;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="inner">
+      <h1>Product Playbooks</h1>
+      <p class="subtitle">Reusable skills and templates for product operations at Mixmax</p>
+    </div>
+  </header>
+
+  <div class="content">
+    <div class="group-label">PM Skills</div>
+    <div class="group">
+      <a class="card" href="skills/gtm-brief.html">
+        <span class="card-icon">&#x1F4D2;</span>
+        <div class="card-body">
+          <div class="card-title">/gtm-brief</div>
+          <div class="card-desc">Generate a structured product brief for GTM from a PRD. Translates engineering language into sales-ready content, creates in Notion, and links back to the source PRD.</div>
+          <div class="card-meta">
+            <span class="tag tag-skill">Skill</span>
+          </div>
+        </div>
+        <span class="card-arrow">&rsaquo;</span>
+      </a>
+    </div>
+
+    <div class="group-label">Templates</div>
+    <div class="group">
+      <div class="empty-state">More templates coming soon</div>
+    </div>
+  </div>
+</body>
+</html>
