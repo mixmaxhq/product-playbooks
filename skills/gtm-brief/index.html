@@ -86,6 +86,16 @@
       <p>Claude Code skill — say "create a GTM brief for [feature]" or use the slash command.</p>
     </div>
 
+    <h2>Install</h2>
+    <div class="section">
+      <p style="margin-bottom: 0.75rem;">Download the skill file and add it to your Claude Code skills directory:</p>
+      <div class="invoke">
+        <code>mkdir -p ~/.claude/skills/gtm-brief &amp;&amp; \<br>curl -Lo ~/.claude/skills/gtm-brief/SKILL.md \<br>&nbsp;&nbsp;https://raw.githubusercontent.com/mixmaxhq/product-playbooks/main/skills/gtm-brief/SKILL.md</code>
+        <p>Restart Claude Code after installing. The skill will be available as <strong>/gtm-brief</strong>.</p>
+      </div>
+      <p>Or <a href="https://raw.githubusercontent.com/mixmaxhq/product-playbooks/main/skills/gtm-brief/SKILL.md" download style="color: #7c3aed; text-decoration: none; font-weight: 500;">download SKILL.md directly</a> and place it at <code style="font-size: 0.75rem; background: #f3f4f6; padding: 0.125rem 0.375rem; border-radius: 3px;">~/.claude/skills/gtm-brief/SKILL.md</code></p>
+    </div>
+
     <h2>What it does</h2>
     <div class="section">
       <p>Takes a PRD or feature spec and produces a customer-facing product brief for sales, CS, and marketing. Creates the brief as a Notion page in the <strong>Product briefs for GTM Repo</strong>, links it back to the source PRD, and iterates on your feedback.</p>
@@ -140,16 +150,6 @@
       <div class="rule"><p><strong>Self-serve when possible</strong> — link to the settings page, don't say "reach out to us."</p></div>
       <div class="rule"><p><strong>Renewal/upsell framing</strong> — explicitly call out which plans don't have the feature and frame as a renewal lever.</p></div>
       <div class="rule"><p><strong>Pyramid principle</strong> — lead with the takeaway. Details and supporting evidence below.</p></div>
-    </div>
-
-    <h2>Install</h2>
-    <div class="section">
-      <p style="margin-bottom: 0.75rem;">Download the skill file and add it to your Claude Code skills directory:</p>
-      <div class="invoke">
-        <code>mkdir -p ~/.claude/skills/gtm-brief &amp;&amp; \<br>curl -o ~/.claude/skills/gtm-brief/SKILL.md \<br>&nbsp;&nbsp;https://mixmaxhq.github.io/product-playbooks/skills/gtm-brief/SKILL.md</code>
-        <p>Restart Claude Code after installing. The skill will be available as <strong>/gtm-brief</strong>.</p>
-      </div>
-      <p>Or <a href="SKILL.md" download style="color: #7c3aed; text-decoration: none; font-weight: 500;">download SKILL.md directly</a> and place it at <code style="font-size: 0.75rem; background: #f3f4f6; padding: 0.125rem 0.375rem; border-radius: 3px;">~/.claude/skills/gtm-brief/SKILL.md</code></p>
     </div>
 
     <h2>Example</h2>
