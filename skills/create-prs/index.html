@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>/create-prs — Product Playbooks</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', -apple-system, sans-serif; background: #fafafa; color: #374151; min-height: 100vh; }
+
+    header {
+      background: #fff;
+      border-bottom: 1px solid #e5e7eb;
+      padding: 1.25rem 2rem;
+    }
+    header .inner { max-width: 640px; margin: 0 auto; }
+    .back { font-size: 0.8125rem; color: #6b7280; text-decoration: none; display: inline-flex; align-items: center; gap: 0.25rem; }
+    .back:hover { color: #7c3aed; }
+
+    .content { max-width: 640px; margin: 0 auto; padding: 2rem 2rem 4rem; }
+
+    h1 { font-size: 1.375rem; font-weight: 700; color: #030712; margin-bottom: 0.25rem; }
+    .subtitle { font-size: 0.8125rem; color: #6b7280; margin-bottom: 2rem; }
+
+    h2 {
+      font-size: 0.8125rem; font-weight: 600; color: #030712;
+      margin-top: 2.5rem; margin-bottom: 0.625rem;
+      text-transform: uppercase; letter-spacing: 0.03em;
+    }
+    h2:first-of-type { margin-top: 0; }
+
+    p, li { font-size: 0.8125rem; color: #374151; line-height: 1.7; }
+    ul { padding-left: 1.25rem; margin-bottom: 1rem; }
+    li { margin-bottom: 0.25rem; }
+
+    .invoke {
+      background: #f5f3ff; border: 1px solid #e0d7fe; border-radius: 8px;
+      padding: 1rem 1.25rem; margin-bottom: 2rem;
+    }
+    .invoke code { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 0.8125rem; color: #7c3aed; }
+    .invoke p { font-size: 0.75rem; color: #6b7280; margin-top: 0.5rem; }
+
+    .step {
+      display: flex; gap: 0.75rem; margin-bottom: 0.75rem;
+    }
+    .step-num {
+      width: 22px; height: 22px; border-radius: 50%; background: #7c3aed; color: #fff;
+      font-size: 0.6875rem; font-weight: 700; display: flex; align-items: center;
+      justify-content: center; flex-shrink: 0; margin-top: 0.125rem;
+    }
+    .step-text { font-size: 0.8125rem; color: #374151; line-height: 1.6; }
+    .step-text strong { color: #030712; }
+
+    .rule {
+      background: #fffbeb; border-left: 3px solid #eab308;
+      padding: 0.5rem 0.75rem; margin-bottom: 0.5rem; border-radius: 0 4px 4px 0;
+    }
+    .rule p { font-size: 0.75rem; margin: 0; }
+    .rule strong { color: #854d0e; }
+
+    .section { margin-bottom: 1.5rem; }
+
+    code.inline {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.75rem; background: #f3f4f6; padding: 0.125rem 0.375rem; border-radius: 3px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="inner">
+      <a class="back" href="/product-playbooks/">&larr; Product Playbooks</a>
+    </div>
+  </header>
+
+  <div class="content">
+    <h1>/create-prs</h1>
+    <p class="subtitle">Pre-flight checks and best practices for creating GitHub PRs in Mixmax repos.</p>
+
+    <h2>Install</h2>
+    <div class="section">
+      <p style="margin-bottom: 0.75rem;">Download the skill file and add it to your Claude Code skills directory:</p>
+      <div class="invoke">
+        <code>mkdir -p ~/.claude/skills/create-prs &amp;&amp; \<br>curl -Lo ~/.claude/skills/create-prs/SKILL.md \<br>&nbsp;&nbsp;https://raw.githubusercontent.com/mixmaxhq/product-playbooks/main/skills/create-prs/SKILL.md</code>
+        <p>Restart Claude Code after installing. The skill will be available as <strong>/create-prs</strong>.</p>
+      </div>
+      <p>Or <a href="https://github.com/mixmaxhq/product-playbooks/blob/main/skills/create-prs/SKILL.md" target="_blank" rel="noopener noreferrer" style="color: #7c3aed; text-decoration: none; font-weight: 500;">view SKILL.md on GitHub</a> and copy it to <code class="inline">~/.claude/skills/create-prs/SKILL.md</code></p>
+    </div>
+
+    <h2>How to use</h2>
+    <div class="invoke">
+      <code>/create-prs</code>
+      <p>Or say "check before PR", "prepare PR", or "pre-flight checks" in any Claude Code conversation.</p>
+    </div>
+
+    <h2>What it does</h2>
+    <div class="section">
+      <p>Runs pre-flight checks on your code changes, fixes common CI failures (lint, formatting, types), and creates clean PRs with proper descriptions. Encodes lessons learned from real Mixmax CI pipelines to catch issues before they reach GitHub Actions.</p>
+    </div>
+
+    <h2>Workflow</h2>
+    <div class="section">
+      <div class="step">
+        <span class="step-num">1</span>
+        <span class="step-text"><strong>Run pre-flight checks</strong> — lint, Prettier, TypeScript, and tests on all changed files</span>
+      </div>
+      <div class="step">
+        <span class="step-num">2</span>
+        <span class="step-text"><strong>Fix issues</strong> — auto-fix lint errors, formatting, and type problems</span>
+      </div>
+      <div class="step">
+        <span class="step-num">3</span>
+        <span class="step-text"><strong>Verify tests pass</strong> — run affected test files locally before pushing</span>
+      </div>
+      <div class="step">
+        <span class="step-num">4</span>
+        <span class="step-text"><strong>Clean commits</strong> — squash if needed into conventional commit(s) with lowercase scope</span>
+      </div>
+      <div class="step">
+        <span class="step-num">5</span>
+        <span class="step-text"><strong>Push and create PR</strong> — with description, links, deployment checklist, and test plan</span>
+      </div>
+      <div class="step">
+        <span class="step-num">6</span>
+        <span class="step-text"><strong>Cross-link</strong> — link companion PRs if changes span multiple repos</span>
+      </div>
+    </div>
+
+    <h2>Common CI failures this catches</h2>
+    <div class="section">
+      <div class="rule"><p><strong>Scope must be lowercase</strong> — <code class="inline">feat(pg-963)</code> not <code class="inline">feat(PG-963)</code>. Commitlint enforces <code class="inline">scope-case: lower-case</code>.</p></div>
+      <div class="rule"><p><strong>Use React.Fragment</strong> — <code class="inline">&lt;React.Fragment&gt;</code> not <code class="inline">&lt;&gt;</code>. The <code class="inline">react/jsx-fragments</code> rule requires the long form.</p></div>
+      <div class="rule"><p><strong>No console statements</strong> — don't commit files with <code class="inline">console.log</code>, especially helper scripts. Keep dev-only tools untracked.</p></div>
+      <div class="rule"><p><strong>Run Prettier</strong> — CI will fail on formatting even if ESLint passes locally. Always run <code class="inline">npx prettier --write</code> on changed files.</p></div>
+      <div class="rule"><p><strong>Non-null assertions</strong> — array element access like <code class="inline">arr[i]</code> returns <code class="inline">T | undefined</code>. Use <code class="inline">arr[i]!</code> when you know the array is non-empty.</p></div>
+    </div>
+
+    <h2>Multi-repo PRs</h2>
+    <div class="section">
+      <ul>
+        <li>Create the simpler/dependency PR first</li>
+        <li>Note "companion PR to follow" in the first PR description</li>
+        <li>Create the second PR and link back using <code class="inline">owner/repo#number</code></li>
+        <li>Update the first PR description to cross-link</li>
+      </ul>
+    </div>
+
+    <h2>Dev-only code</h2>
+    <div class="section">
+      <div class="rule"><p><strong>Remove before PR</strong> — local helper scripts, query param overrides, debug code, hardcoded test values.</p></div>
+      <div class="rule"><p><strong>Keep outside repo</strong> — if dev tooling is useful, add to <code class="inline">.gitignore</code> or keep untracked.</p></div>
+    </div>
+  </div>
+</body>
+</html>
