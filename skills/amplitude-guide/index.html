@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>/amplitude-guide — Product Playbooks</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', -apple-system, sans-serif; background: #fafafa; color: #374151; min-height: 100vh; }
+
+    header { background: #fff; border-bottom: 1px solid #e5e7eb; padding: 1.25rem 2rem; }
+    header .inner { max-width: 640px; margin: 0 auto; }
+    .back { font-size: 0.8125rem; color: #6b7280; text-decoration: none; display: inline-flex; align-items: center; gap: 0.25rem; }
+    .back:hover { color: #7c3aed; }
+
+    .content { max-width: 640px; margin: 0 auto; padding: 2rem 2rem 4rem; }
+
+    h1 { font-size: 1.375rem; font-weight: 700; color: #030712; margin-bottom: 0.25rem; }
+    .subtitle { font-size: 0.8125rem; color: #6b7280; margin-bottom: 2rem; }
+
+    h2 {
+      font-size: 0.8125rem; font-weight: 600; color: #030712;
+      margin-top: 2.5rem; margin-bottom: 0.625rem;
+      text-transform: uppercase; letter-spacing: 0.03em;
+    }
+    h2:first-of-type { margin-top: 0; }
+
+    p, li { font-size: 0.8125rem; color: #374151; line-height: 1.7; }
+    ul { padding-left: 1.25rem; margin-bottom: 1rem; }
+    li { margin-bottom: 0.25rem; }
+
+    .invoke {
+      background: #f5f3ff; border: 1px solid #e0d7fe; border-radius: 8px;
+      padding: 1rem 1.25rem; margin-bottom: 2rem;
+    }
+    .invoke code { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 0.8125rem; color: #7c3aed; }
+    .invoke p { font-size: 0.75rem; color: #6b7280; margin-top: 0.5rem; }
+
+    .step { display: flex; gap: 0.75rem; margin-bottom: 0.75rem; }
+    .step-num {
+      width: 22px; height: 22px; border-radius: 50%; background: #7c3aed; color: #fff;
+      font-size: 0.6875rem; font-weight: 700; display: flex; align-items: center;
+      justify-content: center; flex-shrink: 0; margin-top: 0.125rem;
+    }
+    .step-text { font-size: 0.8125rem; color: #374151; line-height: 1.6; }
+    .step-text strong { color: #030712; }
+
+    .rule {
+      background: #fffbeb; border-left: 3px solid #eab308;
+      padding: 0.5rem 0.75rem; margin-bottom: 0.5rem; border-radius: 0 4px 4px 0;
+    }
+    .rule p { font-size: 0.75rem; margin: 0; }
+    .rule strong { color: #854d0e; }
+
+    .trap {
+      background: #fef2f2; border-left: 3px solid #ef4444;
+      padding: 0.5rem 0.75rem; margin-bottom: 0.5rem; border-radius: 0 4px 4px 0;
+    }
+    .trap p { font-size: 0.75rem; margin: 0; }
+    .trap strong { color: #991b1b; }
+
+    .section { margin-bottom: 1.5rem; }
+
+    code.inline {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.75rem; background: #f3f4f6; padding: 0.125rem 0.375rem; border-radius: 3px;
+    }
+
+    table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; font-size: 0.75rem; }
+    th { text-align: left; font-weight: 600; color: #030712; padding: 0.5rem; border-bottom: 2px solid #e5e7eb; }
+    td { padding: 0.5rem; border-bottom: 1px solid #f3f4f6; color: #374151; }
+    a { color: #7c3aed; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="inner">
+      <a class="back" href="/product-playbooks/">&larr; Product Playbooks</a>
+    </div>
+  </header>
+
+  <div class="content">
+    <h1>/amplitude-guide</h1>
+    <p class="subtitle">Curated event guide for Mixmax product analytics. Ensures the right events with correct filters.</p>
+
+    <h2>Install</h2>
+    <div class="section">
+      <p style="margin-bottom: 0.75rem;">Download the skill file and add it to your Claude Code skills directory:</p>
+      <div class="invoke">
+        <code>mkdir -p ~/.claude/skills/amplitude-guide &amp;&amp; \<br>curl -Lo ~/.claude/skills/amplitude-guide/SKILL.md \<br>&nbsp;&nbsp;https://raw.githubusercontent.com/mixmaxhq/product-playbooks/main/skills/amplitude-guide/SKILL.md</code>
+        <p>Restart Claude Code after installing. The skill will be available as <strong>/amplitude-guide</strong>.</p>
+      </div>
+      <p>Or <a href="https://github.com/mixmaxhq/product-playbooks/blob/main/skills/amplitude-guide/SKILL.md" target="_blank">view SKILL.md on GitHub</a></p>
+    </div>
+
+    <h2>How to use</h2>
+    <div class="invoke">
+      <code>/amplitude-guide</code>
+      <p>Or just ask a data question: "what's our signup to paid conversion?", "how are signups trending?", "which events should I use for activation analysis?"</p>
+    </div>
+
+    <h2>What it does</h2>
+    <div class="section">
+      <p>Before running any Amplitude query, the skill asks three questions: <strong>timeframe</strong>, <strong>conversion window</strong>, and <strong>scenario-specific filters</strong>. It then guides you to the right events, warns about traps, and references pre-built curated charts as starting points.</p>
+    </div>
+
+    <h2>Workflow</h2>
+    <div class="section">
+      <div class="step">
+        <span class="step-num">1</span>
+        <span class="step-text"><strong>Understand the question</strong> — what analysis is the user trying to run?</span>
+      </div>
+      <div class="step">
+        <span class="step-num">2</span>
+        <span class="step-text"><strong>Ask clarifying questions</strong> — timeframe, conversion window, and scenario-specific filters</span>
+      </div>
+      <div class="step">
+        <span class="step-num">3</span>
+        <span class="step-text"><strong>Map to curated events</strong> — select the right events from the registry with correct filters</span>
+      </div>
+      <div class="step">
+        <span class="step-num">4</span>
+        <span class="step-text"><strong>Warn about traps</strong> — flag misleading events or missing filters before querying</span>
+      </div>
+      <div class="step">
+        <span class="step-num">5</span>
+        <span class="step-text"><strong>Run or guide the analysis</strong> — query via Amplitude MCP or point to curated charts</span>
+      </div>
+    </div>
+
+    <h2>Key traps the skill catches</h2>
+    <div class="section">
+      <div class="trap"><p><strong>Unfiltered Plan changed</strong> — includes trials, free downgrades, and direct sales. Must filter by productId.</p></div>
+      <div class="trap"><p><strong>Unfiltered Sent email on server</strong> — includes plain emails with no Mixmax features. Must use positive filters (withSequence, withTemplate, etc.).</p></div>
+      <div class="trap"><p><strong>default_calendarlink_in_signature</strong> — passive, auto-added. Not a real calendar enhancement. Exclude from calendar analysis.</p></div>
+      <div class="trap"><p><strong>Virality leadSource</strong> — includes workspace invites when not filtered to isFirstWorkspaceAdmin. Segment with viralSource.</p></div>
+      <div class="trap"><p><strong>Onboarding events as product usage</strong> — Onboarding_Step_Shown, Created profile, etc. are instrumentation, not activation signals.</p></div>
+      <div class="trap"><p><strong>Rate without volume</strong> — conversion rate can be misleading when traffic mix shifts. Always check absolute numbers alongside rates.</p></div>
+    </div>
+
+    <h2>Curated charts</h2>
+    <div class="section">
+      <p>13 pre-built, correctly-filtered Amplitude charts covering funnels, trending, traffic, and correlations. See the <a href="https://github.com/mixmaxhq/product-playbooks/blob/main/skills/amplitude-guide/SKILL.md">full skill file</a> for the complete list with links.</p>
+    </div>
+  </div>
+</body>
+</html>
