@@ -73,7 +73,7 @@ When you detect the user's question matches a scenario, ask the relevant filter 
 - Then apply the POSITIVE filter for what they want on `Sent email on server`:
   - Sequence emails: `withSequence = true`
   - Template emails: `withTemplate = true`
-  - Calendar-enhanced emails: `calendarEnhancementTypes` contains `calendarlink`, `availability`, or `event`. **Trap:** `default_calendarlink_in_signature` alone is passive/auto-added — NOT a real calendar enhancement
+  - Calendar-enhanced emails: `calendarEnhancementTypes` contains `calendarlink`, `availability`, `event`, or `groupscheduling`. **Trap:** `default_calendarlink_in_signature` alone is passive/auto-added — NOT a real calendar enhancement
   - Insight-driven emails: `relatedMixmaxInsights` is not `[]`
 - **Do NOT** analyze `Sent email on server` without a specific filter — plain emails with no Mixmax features are noise
 
@@ -114,9 +114,16 @@ When you detect the user's question matches a scenario, ask the relevant filter 
 | `Sequences_Sequence_Created` | Created a new sequence | Creation ≠ activation — don't confuse |
 | `Connected Third-Party Integration` | Connected a 3rd-party service | Exclude google/microsoft (universal filter). Signal: linkedin, salesforce, hubspot, zoom |
 | `App_Navigation_PageLoaded` | Page navigation | Properties: `page`, `subpage`. Useful for journey analysis, NOT conversion |
-| `Template` | Used email template | Feature adoption signal |
+| `Template` | Used email template | Filter by `action = "create"` for actual template creation. Without filter, includes views/uses too. |
+| `meeting templates` | Calendar setup completed (when filtered by `action = updated`) | MUST filter by `action = updated` — other action values are not calendar setup completion |
 | `MeetingCopilot_Summary_Attempt` / `_Accessed` / `_SharedEmail_Sent` | Meeting Copilot usage | Low volume, niche feature |
 | `Workspace_Member_Added` | Team member added | Team expansion signal |
+| `Tasks` | Tasks feature usage | Filter by `action = "completed task"` for actual task completion — value signal |
+| `Rules` | Automation rules | Filter by `action = 'activate'` for successful rule creation — value signal |
+| `Calendar_Meeting_Confirmed` | Meeting booked via Mixmax calendar | Value signal — indicates calendar feature delivering outcome |
+| `Installed extension` | Extension installation detected | Setup moment indicator |
+| `Clicked install extension` | Clicked extension install prompt | Proxy for extension installation — not confirmation of actual install |
+| `Viewed message tracking details` | User checks email tracking results in Gmail | Engagement signal — user getting value from tracking |
 
 ### Tier 3: Noise events (warn or exclude)
 
@@ -127,14 +134,13 @@ If the user tries to use any of these, warn them:
 | `Onboarding_Step_Shown` / `_Finished` | Onboarding instrumentation, not product usage |
 | `OnboardingHub_*` | Onboarding hub events |
 | `Dashboard onboarding finished` | Onboarding completion marker, not activation |
-| `Created profile` | Profile creation during onboarding |
+| `Created profile` | Profile creation during onboarding. Exception: when `hasExtensionInstalled = true`, signals setup moment |
 | `Created workspace` | Workspace creation, not meaningful product action |
-| `Clicked install extension` | Extension install prompt, not actual install |
 | `Message sent via Mixmax Lite` | Lite users, different product surface |
 | `Calendar inserted` | Passive action, not meaningful |
 | `User_Levers_Changed` | Internal lever system |
 | `Sent email on server` (unfiltered) | Without feature filters, this is just "sent any email" — meaningless |
-| `Sent sidechat message` | No matching actions found in recent cohorts |
+| `Shared conversations` / `Sent sidechat message` | Alias for same event. Filter by `action = "added comment"` for active Sidechat usage — without filter it's noise |
 | Gmail UI performance events | System telemetry |
 | `LayoutMigration_*` | Internal migration tracking |
 | `ImportContacts_*` | Contact import system events |
