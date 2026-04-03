@@ -12,6 +12,8 @@ description: >
 
 # Amplitude Guide — Skill
 
+> **Last updated:** 2026-04-03 — [Published version](https://mixmaxhq.github.io/product-playbooks/skills/amplitude-guide/)
+
 ## What this does
 Guides data analysis on Mixmax Amplitude data by ensuring the right events are used with correct filters. Prevents common traps (wrong event, missing filter, misleading metric). Can run analysis via Amplitude MCP tools or review existing charts.
 
@@ -83,6 +85,14 @@ When you detect the user's question matches a scenario, ask the relevant filter 
 - Can segment further using `viralSource` property
 - `jobRole` segmentation is always available and useful for ICP analysis
 
+### Scenario: Meeting Copilot analysis
+**Ask:** "Are you looking at adoption (meetings recorded), summary engagement, sharing, or bot infrastructure health?"
+- **Adoption (best indicator):** Use `MeetingCopilot_Recall_Meeting_Recorded` — the canonical "meeting was successfully recorded" signal. This is the single best indicator of Meeting Copilot adoption: the bot was admitted to the meeting and is actively recording.
+- **Summary engagement:** Use `MeetingCopilot_Summary_Accessed` (user viewed summary) and `MeetingAssistant_Followup_Clicked` (user acted on follow-up). These show value delivery.
+- **Sharing:** Use `MeetingCopilot_Share_Created` for actual shares. `MeetingCopilot_ShareModal_Opened` is intent only.
+- **Bot infrastructure:** Use the BotRunner and Recall event chains (see Meeting Copilot event registry below). Filter `MeetingCopilot_BotRunner_LaunchResult` by `result = "success"` or `"failure"` for launch success rates.
+- **Trap:** `MeetingCopilot_BotRunner_LaunchSkipped` has extremely high volume (~1.4M) — it fires for every meeting that gets filtered out. Do NOT use as a proxy for anything user-facing.
+
 ### Scenario: Activation / aha moment analysis
 **Ask:** "Which aha moment? Sequence activation, email with calendar, or action taken (Todo/Smart Follow-up)?"
 - Aha #1 (Sequence activation): `SequenceEditor_ConfirmActivateSequence_Clicked` or `SequenceServer_ActivateRecipients_Activated` — most correlated with payment (31% conversion rate)
@@ -101,8 +111,6 @@ When you detect the user's question matches a scenario, ask the relevant filter 
 | `Plan changed` | Payment or plan change | `productId` (see filter scenarios for valid paid values) |
 | `ShoppingCart_ProductComparison_PageLoaded` | Viewed pricing/comparison page | Critical early touchpoint — 29% of buyers hit this before any feature |
 | `ShoppingCart_Summary_PageLoaded` | Viewed checkout summary | Purchase intent signal |
-| `ShoppingCart_PayNow_Clicked` | Clicked pay button | Direct purchase intent |
-| `Billing - purchase` / `Billing - purchased for` | Purchase confirmed | Final conversion event |
 
 ### Tier 2: Activation & feature events (curated, need specific filters)
 
@@ -116,7 +124,6 @@ When you detect the user's question matches a scenario, ask the relevant filter 
 | `App_Navigation_PageLoaded` | Page navigation | Properties: `page`, `subpage`. Useful for journey analysis, NOT conversion |
 | `Template` | Used email template | Filter by `action = "create"` for actual template creation. Without filter, includes views/uses too. |
 | `meeting templates` | Calendar setup completed (when filtered by `action = updated`) | MUST filter by `action = updated` — other action values are not calendar setup completion |
-| `MeetingCopilot_Summary_Attempt` / `_Accessed` / `_SharedEmail_Sent` | Meeting Copilot usage | Low volume, niche feature |
 | `Workspace_Member_Added` | Team member added | Team expansion signal |
 | `Tasks` | Tasks feature usage | Filter by `action = "completed task"` for actual task completion — value signal |
 | `Rules` | Automation rules | Filter by `action = 'activate'` for successful rule creation — value signal |
@@ -124,6 +131,77 @@ When you detect the user's question matches a scenario, ask the relevant filter 
 | `Installed extension` | Extension installation detected | Setup moment indicator |
 | `Clicked install extension` | Clicked extension install prompt | Proxy for extension installation — not confirmation of actual install |
 | `Viewed message tracking details` | User checks email tracking results in Gmail | Engagement signal — user getting value from tracking |
+
+### Meeting Copilot events (comprehensive registry)
+
+**Best adoption indicator:** `MeetingCopilot_Recall_Meeting_Recorded` — fired when Recall.ai sends a `bot.in_call_recording` webhook. This is the canonical "meeting was successfully recorded" signal: the bot was admitted and is actively recording. Use this as THE metric for Meeting Copilot adoption.
+
+#### Bot lifecycle (infrastructure — use for debugging, not adoption)
+
+| Event | What it means | Key properties |
+|-------|--------------|----------------|
+| `MeetingCopilot_BotRunner_Invoked` | Bot-runner Lambda passed initial eligibility checks and is evaluating whether to launch. NOT fired for every invocation — early failures go to LaunchSkipped. | ~943K volume |
+| `MeetingCopilot_BotRunner_AttemptLaunch` | All eligibility checks passed, about to call Recall.ai API to create bot. The "we decided to launch" signal. | ~12K volume |
+| `MeetingCopilot_BotRunner_LaunchResult` | Recall.ai create-bot API call returned. | `result` ("success"/"failure"), `failureCause`, `launchLatencyMs` |
+| `MeetingCopilot_BotRunner_LaunchSkipped` | Bot-runner decided NOT to launch. Extremely high volume (~1.4M) — most meetings get filtered out. | `skippedReason` (feature disabled, quota exceeded, bot already exists, user declined, workspace disabled) |
+| `MeetingCopilot_BotRunner_Failure` | Unhandled exception crashed the bot-runner Lambda. Not normal skip/failure paths. | `errorType` (validation_error, quota_exceeded_error, recall_ai_error, unknown) |
+
+#### Recording lifecycle (Recall.ai webhooks)
+
+| Event | What it means | Notes |
+|-------|--------------|-------|
+| `MeetingCopilot_Recall_Bot_Join_Attempt` | Bot is attempting to join the meeting room (bot.joining_call webhook). | |
+| `MeetingCopilot_Recall_Bot_In_Waiting_Room` | Bot arrived but host hasn't admitted it yet (bot.in_waiting_room webhook). | |
+| `MeetingCopilot_Recall_Waiting_Room_Timeout` | Bot timed out in waiting room — host never admitted it. | Failure signal |
+| `MeetingCopilot_Recall_Meeting_Recorded` | **Best adoption indicator.** Bot admitted and actively recording (bot.in_call_recording webhook). | ~4.3K volume. Use this for adoption metrics. |
+| `MeetingCopilot_Recall_Call_Ended` | Meeting call ended — bot left or call terminated. | `subCode` (exit code from Recall) |
+| `MeetingCopilot_Recall_Bot_Done` | Bot processing fully complete (post-processing finished). | |
+
+#### Summary & value delivery
+
+| Event | What it means | Notes |
+|-------|--------------|-------|
+| `Meeting_Summarized` | A meeting summary was generated. | ~1.9K volume |
+| `MeetingCopilot_Summary_Persisted` | AI summary generated and saved to MongoDB. | `transcriptSize`, `promptVersion`, `meetingClassification` |
+| `MeetingCopilot_Summary_Email_Sent` | Summary email delivered to user. | |
+| `MeetingCopilot_Summary_Accessed` | User viewed a meeting summary via API. | `access_level` (owner, shared viewer, workspace admin). Value delivery signal. |
+| `MeetingAssistant_Followup_Clicked` | User clicked a follow-up action from summary. | Value delivery signal — user acting on summary. |
+
+#### User settings & consent
+
+| Event | What it means | Notes |
+|-------|--------------|-------|
+| `MeetingAssistant_Settings_FeatureToggled` | User toggled Google Meet or Zoom bot on/off in settings. | `feature` (GoogleMeet_Bot/Zoom_Bot), `status` (Enabled/Disabled) |
+| `MeetingAssistant_Settings_SummaryDeliveryChanged` | User changed summary delivery preferences. | |
+| `Meeting_Copilot_Consent_Modal_Show` / `_Dismiss` / `_Continue` | Consent modal lifecycle. | Near-dead/dead volume |
+| `MeetingCopilot_Consent_Granted` / `_Denied` | User granted or denied consent. | Near-dead volume |
+
+#### Sharing
+
+| Event | What it means | Notes |
+|-------|--------------|-------|
+| `MeetingCopilot_ShareModal_Opened` | User opened the share modal. | Intent signal |
+| `MeetingCopilot_Share_Created` | User actually shared a summary. | Action signal |
+| `MeetingCopilot_Share_CopyLink_Clicked` | User copied share link. | |
+| `MeetingCopilot_Share_LinkSharing_Toggled` | User toggled link sharing on/off. | |
+
+#### Feedback
+
+| Event | What it means | Notes |
+|-------|--------------|-------|
+| `MeetingAssistant_Summary_feedback_rated` | User rated a summary (good/meh/bad). | Near-dead volume |
+| `MeetingPrep_feedback_rated` | User rated meeting prep. | Low volume |
+
+#### Legacy / Dead Meeting Copilot events (warn or exclude)
+
+| Event | Why it's dead |
+|-------|--------------|
+| `meet_started` / `meet_ended` | Legacy Chrome extension-based Google Meet bot (pre-Recall.ai). Replaced by `MeetingCopilot_Recall_*` events. |
+| `MeetingAssistant_Bot_MeetingLeft` | Legacy self-hosted Zoom bot (pre-Recall.ai). All bot ops now through Recall.ai. |
+| `MeetingAssistant_fulltranscript_tab_clicked` / `_visited` | Removed from all codebases. Replaced by `MeetingCopilot_Transcript_Tab_Changed` / `_Visited` in new transcript-webapp. |
+| `MeetingAssistant_Summary_Feedback` | Original feedback event (good/bad only). Superseded by `_feedback_rated`. |
+| `MeetingAssistant_Summary_feedback_commented` | Enhanced feedback with text comment. Dead volume. |
+| `Meeting_Copilot_UpsellCopilotBanner_Viewed` / `_Clicked` | Dead upsell banner events. |
 
 ### Tier 3: Noise events (warn or exclude)
 
