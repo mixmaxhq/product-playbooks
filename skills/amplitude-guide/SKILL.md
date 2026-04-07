@@ -72,7 +72,9 @@ When you detect the user's question matches a scenario, ask the relevant filter 
 
 **Property name trap:** the field is `productIds` (plural, array type), NOT `productId`. Filtering on `productId` will silently return zero results.
 
-**Gen0 vs gen1 trap (direct-sales contracts):** `productIds = (none)` does NOT reliably mean gen0 (legacy). Direct-sales gen1 contracts like `gen1-copilots-for-teams` often fire `Plan changed` with `productIds` empty AND `plan_title` blank, so they look identical to legacy gen0 in Amplitude. Intercom typically labels these workspaces "Free" because the seats are billed outside the self-serve subscription. To confirm gen0 vs gen1 for a specific user, check the admin tool or billing DB — Amplitude alone is not authoritative.
+**Gen0 vs gen1 trap (direct-sales contracts):** `productIds = (none)` does NOT reliably mean gen0 (legacy). Direct-sales gen1 contracts like `gen1-copilots-for-teams` often fire `Plan changed` with `productIds` empty AND `plan_title` blank, so they look identical to legacy gen0 in Amplitude. Intercom typically labels these workspaces "Free" because the seats are billed outside the self-serve subscription.
+
+**Use `gp:productIds` (user group property), not the event property, to find paid users authoritatively.** The event property `productIds` on `Plan changed` only gets populated when a user goes through the self-serve Stripe checkout. Direct-sales contracts (Copilot for Teams, enterprise) set the billing group property `gp:productIds` on the user instead. To find all users on a given plan — including direct sales — filter `_active` (Any Active Event) by user property `gp:productIds set contains "gen1-..."`. Example: chart `7bpbmbfu` finds all Copilot for Teams users this way. If you only filter the `Plan changed` event property, you will silently miss every direct-sales workspace.
 
 ### Scenario: Email activity analysis
 **Ask:** "What type of email activity are you interested in? Sequence emails, template emails, emails with calendar enhancements, or emails triggered by insights (Todo/Smart Follow-up)?"
