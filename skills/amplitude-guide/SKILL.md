@@ -70,6 +70,10 @@ When you detect the user's question matches a scenario, ask the relevant filter 
 - Exclude free downgrades: filter out `[gen1-free]`, `Free`, `[]` (empty)
 - Exclude direct sales: filter out `[gen1-copilots-for-teams, gen1-custom-branding-addon]`
 
+**Property name trap:** the field is `productIds` (plural, array type), NOT `productId`. Filtering on `productId` will silently return zero results.
+
+**Gen0 vs gen1 trap (direct-sales contracts):** `productIds = (none)` does NOT reliably mean gen0 (legacy). Direct-sales gen1 contracts like `gen1-copilots-for-teams` often fire `Plan changed` with `productIds` empty AND `plan_title` blank, so they look identical to legacy gen0 in Amplitude. Intercom typically labels these workspaces "Free" because the seats are billed outside the self-serve subscription. To confirm gen0 vs gen1 for a specific user, check the admin tool or billing DB — Amplitude alone is not authoritative.
+
 ### Scenario: Email activity analysis
 **Ask:** "What type of email activity are you interested in? Sequence emails, template emails, emails with calendar enhancements, or emails triggered by insights (Todo/Smart Follow-up)?"
 - Then apply the POSITIVE filter for what they want on `Sent email on server`:
