@@ -120,3 +120,15 @@ For experiment PRs specifically, always include:
 - Lever names and their scopes (`:userId`, `:workspaceId`, `:domain`)
 - What percentages to configure on staging vs production
 - Who owns lever creation if it's not you
+
+## Troubleshooting
+
+### Atlantis "no space left on device"
+
+If you see:
+```
+Plan Error
+creating new workspace: mkdir /home/atlantis/.atlantis/repos/mixmaxhq/app/<PR number>: no space left on device
+```
+
+**Fix:** Add a comment to the PR containing only `atlantis plan`. This triggers Atlantis to retry and cleans up the stale workspace.
