@@ -37,8 +37,12 @@ These filters apply to EVERY analysis, no exceptions:
 
 | Filter | How to apply | Why |
 |--------|-------------|-----|
-| Exclude Mixmax Test Users | `userdata_cohort is not vbyym9zo` | Test accounts pollute all metrics |
+| Exclude Mixmax Test Users | `userdata_cohort is not vbyym9zo` | Gold-standard internal filter — this cohort covers both test accounts **and** Mixmax employees. Use this alone; do not also exclude the `Mixmax internal` cohort |
 | Exclude auto-connected integrations | On `Connected Third-Party Integration`: exclude `google` and `microsoft` | These are authentication methods, not real integrations |
+
+### Trap: do NOT also exclude the `Mixmax internal` cohort (`zd1wlmz`)
+
+`Mixmax Test Users` (`vbyym9zo`) is the single filter to use for excluding internal + test activity. The older `Mixmax internal` cohort (`zd1wlmz`) was last updated in 2019, overlaps with Test Users, and shouldn't be layered on top — doing so suggests the filter is doing more work than it is, and will cause confusion with other analysts. One cohort, one filter.
 
 ---
 
